@@ -41,13 +41,18 @@ Vercel will auto-detect this as a Vite project. Configure the following:
 In the Vercel dashboard, go to Settings > Environment Variables and add:
 
 ```
-NEXT_PUBLIC_CHAIN_ID=11155111
-NEXT_PUBLIC_RPC_URL=your_rpc_url_here
-NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID=your_wallet_connect_project_id
-NEXT_PUBLIC_INFURA_API_KEY=your_infura_api_key
+VITE_CHAIN_ID=11155111
+VITE_RPC_URL=https://1rpc.io/sepolia
+VITE_WALLET_CONNECT_PROJECT_ID=2ec9743d0d0cd7fb94dee1a7e6d33475
+VITE_INFURA_API_KEY=your_infura_api_key_here
 ```
 
-**Note**: Replace the placeholder values with your actual API keys and configuration.
+**Recommended RPC URLs:**
+- `https://1rpc.io/sepolia` (Free, reliable)
+- `https://sepolia.infura.io/v3/YOUR_KEY` (Infura)
+- `https://sepolia.g.alchemy.com/v2/YOUR_KEY` (Alchemy)
+
+**Note**: The app will work with the default values, but for production use your own API keys.
 
 **Important**: Make sure to set these for all environments (Production, Preview, Development).
 

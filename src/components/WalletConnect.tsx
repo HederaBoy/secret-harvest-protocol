@@ -1,8 +1,41 @@
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { Card } from "@/components/ui/card";
-import { Shield } from "lucide-react";
+import { Shield, AlertCircle } from "lucide-react";
+import { useState, useEffect } from 'react';
 
 const WalletConnect = () => {
+  const [hasError, setHasError] = useState(false);
+
+  useEffect(() => {
+    // Listen for wallet connection errors
+    const handleError = (event: ErrorEvent) => {
+      if (event.message.includes('proto pollution') || 
+          event.message.includes('wallet') ||
+          event.message.includes('WalletConnect')) {
+        setHasError(true);
+      }
+    };
+
+    window.addEventListener('error', handleError);
+    return () => window.removeEventListener('error', handleError);
+  }, []);
+
+  if (hasError) {
+    return (
+      <Card className="p-4 border-destructive/50 bg-destructive/10">
+        <div className="flex items-center gap-3">
+          <AlertCircle className="w-5 h-5 text-destructive" />
+          <div className="flex flex-col">
+            <span className="font-tech text-sm text-destructive">Connection Error</span>
+            <span className="text-xs text-muted-foreground">
+              Please refresh the page and try again
+            </span>
+          </div>
+        </div>
+      </Card>
+    );
+  }
+
   return (
     <ConnectButton.Custom>
       {({
