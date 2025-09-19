@@ -2,9 +2,13 @@ import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Eye, EyeOff, Sprout, Coins, Lock, Unlock } from "lucide-react";
+import { Eye, EyeOff, Sprout, Coins, Lock, Unlock, Loader2 } from "lucide-react";
+import { useSecretHarvest } from "@/hooks/useContract";
+import { useFHE } from "@/utils/encryption";
+import { useAccount } from "wagmi";
 
 interface SeedPodProps {
+  farmId: number;
   name: string;
   stakingToken: string;
   rewardToken: string;
@@ -17,6 +21,7 @@ interface SeedPodProps {
 }
 
 const SeedPod = ({
+  farmId,
   name,
   stakingToken,
   rewardToken,
@@ -28,6 +33,64 @@ const SeedPod = ({
   maturity
 }: SeedPodProps) => {
   const [showRewards, setShowRewards] = useState(!isEncrypted);
+  const [stakeAmount, setStakeAmount] = useState("");
+  const [isStaking, setIsStaking] = useState(false);
+  const [isHarvesting, setIsHarvesting] = useState(false);
+  
+  const { address } = useAccount();
+  const { stakeTokens, claimRewards, isLoading } = useSecretHarvest();
+  const { calculateEncryptedRewards, generateProof, decryptReward } = useFHE();
+
+  // Handle staking with FHE encryption
+  const handleStake = async () => {
+    if (!stakeAmount || !address) return;
+    
+    setIsStaking(true);
+    try {
+      // Calculate encrypted rewards for the stake
+      const encryptedRewards = calculateEncryptedRewards(stakeAmount, apy, 86400); // 1 day
+      
+      // Stake tokens with encrypted rewards
+      await stakeTokens(farmId, stakeAmount);
+      
+      // Reset form
+      setStakeAmount("");
+    } catch (error) {
+      console.error("Error staking:", error);
+    } finally {
+      setIsStaking(false);
+    }
+  };
+
+  // Handle harvesting encrypted rewards
+  const handleHarvest = async () => {
+    if (!address) return;
+    
+    setIsHarvesting(true);
+    try {
+      // Generate encrypted rewards and proof
+      const encryptedRewards = calculateEncryptedRewards(userStaked, apy, 86400);
+      const proof = generateProof(farmId, address, encryptedRewards);
+      
+      // Claim rewards with encrypted data
+      await claimRewards(farmId, encryptedRewards, proof);
+    } catch (error) {
+      console.error("Error harvesting:", error);
+    } finally {
+      setIsHarvesting(false);
+    }
+  };
+
+  // Toggle reward visibility (decrypt/encrypt)
+  const toggleRewardVisibility = () => {
+    if (isEncrypted && !showRewards) {
+      // Decrypt rewards to show actual amount
+      const decryptedAmount = decryptReward(pendingRewards);
+      setShowRewards(true);
+    } else {
+      setShowRewards(!showRewards);
+    }
+  };
   
   const maturityColor = maturity > 80 ? "text-harvest-ready" : 
                        maturity > 40 ? "text-primary" : "text-muted-foreground";
@@ -102,7 +165,7 @@ const SeedPod = ({
               <Button
                 variant="ghost"
                 size="sm"
-                onClick={() => setShowRewards(!showRewards)}
+                onClick={toggleRewardVisibility}
                 className="h-8 w-8 p-0 hover:bg-primary/20"
               >
                 {showRewards ? (
@@ -123,19 +186,49 @@ const SeedPod = ({
           </div>
         </div>
 
+        {/* Stake Input */}
+        <div className="space-y-2">
+          <input
+            type="number"
+            placeholder="Amount to stake"
+            value={stakeAmount}
+            onChange={(e) => setStakeAmount(e.target.value)}
+            className="w-full px-3 py-2 bg-muted/50 border border-primary/30 rounded-lg font-tech text-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
+          />
+        </div>
+
         {/* Actions */}
         <div className="flex gap-2">
           <Button 
             variant="outline" 
             className="flex-1 font-tech border-primary/30 hover:bg-primary/20"
+            onClick={handleStake}
+            disabled={!stakeAmount || isStaking || isLoading}
           >
-            Stake More
+            {isStaking ? (
+              <>
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                Staking...
+              </>
+            ) : (
+              "Stake More"
+            )}
           </Button>
           <Button 
             className="flex-1 bg-gradient-secondary font-tech hover:shadow-cyber"
-            disabled={maturity < 100}
+            disabled={maturity < 100 || isHarvesting || isLoading}
+            onClick={handleHarvest}
           >
-            {maturity >= 100 ? "Harvest" : "Growing..."}
+            {isHarvesting ? (
+              <>
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                Harvesting...
+              </>
+            ) : maturity >= 100 ? (
+              "Harvest"
+            ) : (
+              "Growing..."
+            )}
           </Button>
         </div>
       </div>

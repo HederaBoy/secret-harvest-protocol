@@ -1,14 +1,17 @@
-# Secret Harvest Protocol
+# 🌾 Secret Harvest Protocol
 
-A revolutionary DeFi farming protocol that uses Fully Homomorphic Encryption (FHE) to keep yield rewards completely private. Farmers can stake their assets and earn rewards while maintaining complete privacy over their earnings until they choose to claim them.
+> **The Future of Private DeFi Farming**  
+> *Where your yield rewards remain encrypted until you choose to reveal them*
 
-## Features
+Secret Harvest Protocol revolutionizes decentralized finance by implementing **Fully Homomorphic Encryption (FHE)** to create the world's first truly private yield farming experience. Stake your assets and watch your rewards grow in complete secrecy.
 
-- **Private Rewards**: Yield calculations happen in encrypted space using FHE
-- **Quantum Secure**: Built on cutting-edge cryptography that remains secure against quantum computers
-- **Maximum Yield**: Optimized protocols deliver industry-leading APYs while maintaining privacy
-- **Real Wallet Integration**: Connect with MetaMask, WalletConnect, and other popular wallets
-- **Multi-Chain Support**: Deployed on Sepolia testnet with plans for mainnet expansion
+## ✨ Core Innovation
+
+🔐 **Encrypted Yield Calculations** - Your rewards are computed in encrypted space  
+🛡️ **Quantum-Resistant Security** - Future-proof against quantum computer attacks  
+⚡ **Lightning-Fast Transactions** - Optimized for minimal gas consumption  
+🌐 **Multi-Wallet Support** - Connect with any Web3 wallet seamlessly  
+🔗 **Cross-Chain Ready** - Built for the multi-chain future
 
 ## Technology Stack
 
@@ -52,10 +55,12 @@ npm install
 ```bash
 # Create .env file with the following variables:
 NEXT_PUBLIC_CHAIN_ID=11155111
-NEXT_PUBLIC_RPC_URL=https://sepolia.infura.io/v3/b18fb7e6ca7045ac83c41157ab93f990
-NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID=2ec9743d0d0cd7fb94dee1a7e6d33475
-NEXT_PUBLIC_INFURA_API_KEY=b18fb7e6ca7045ac83c41157ab93f990
+NEXT_PUBLIC_RPC_URL=your_rpc_url_here
+NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID=your_wallet_connect_project_id
+NEXT_PUBLIC_INFURA_API_KEY=your_infura_api_key
 ```
+
+**Note**: Replace the placeholder values with your actual configuration.
 
 4. Start the development server:
 ```bash

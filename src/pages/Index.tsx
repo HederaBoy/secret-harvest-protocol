@@ -14,6 +14,7 @@ const Index = () => {
 
   const seedPods = [
     {
+      farmId: 1,
       name: "ETH Quantum Pod",
       stakingToken: "ETH",
       rewardToken: "QFT",
@@ -25,6 +26,7 @@ const Index = () => {
       maturity: 85
     },
     {
+      farmId: 2,
       name: "USDC Stealth Farm",
       stakingToken: "USDC",
       rewardToken: "PRIV",
@@ -36,6 +38,7 @@ const Index = () => {
       maturity: 67
     },
     {
+      farmId: 3,
       name: "BTC Cipher Grove",
       stakingToken: "BTC",
       rewardToken: "CRYPT",
@@ -47,6 +50,7 @@ const Index = () => {
       maturity: 42
     },
     {
+      farmId: 4,
       name: "FHE Genesis Seed",
       stakingToken: "FHE",
       rewardToken: "GENESIS",
