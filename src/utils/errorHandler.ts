@@ -81,7 +81,10 @@ export class ErrorSuppressor {
       'api.web3modal.org',
       'VM57:2',
       'VM59:2',
-      'VM54:2'
+      'VM54:2',
+      '(anonymous) @ contentScript.js:2',
+      '(anonymous) @ injected.js:1',
+      '(anonymous) @ bundle_content.js:1'
     ];
 
     return suppressPatterns.some(pattern => 

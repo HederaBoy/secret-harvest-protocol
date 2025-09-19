@@ -34,6 +34,8 @@
       (function() {
         // Store original error handlers
         const originalConsoleError = console.error;
+        const originalConsoleLog = console.log;
+        const originalConsoleWarn = console.warn;
         const originalWindowError = window.onerror;
         const originalUnhandledRejection = window.onunhandledrejection;
         
@@ -58,7 +60,13 @@
             'Failed to fetch remote project configuration',
             'Reown Config',
             'pulse.walletconnect',
-            'api.web3modal.org'
+            'api.web3modal.org',
+            'VM59:2',
+            'VM57:2',
+            'VM54:2',
+            '(anonymous) @ contentScript.js:2',
+            '(anonymous) @ injected.js:1',
+            '(anonymous) @ bundle_content.js:1'
           ];
           
           return suppressPatterns.some(pattern => 
@@ -73,6 +81,15 @@
             return; // Suppress the error
           }
           originalConsoleError.apply(console, args);
+        };
+        
+        // Override console.log
+        console.log = function(...args) {
+          const message = args.join(' ');
+          if (shouldSuppressError(message)) {
+            return; // Suppress the log
+          }
+          originalConsoleLog.apply(console, args);
         };
         
         // Override window.onerror
@@ -105,7 +122,60 @@
           originalConsoleWarn.apply(console, args);
         };
         
+        // Additional aggressive error suppression
+        const originalConsoleTrace = console.trace;
+        console.trace = function(...args) {
+          const message = args.join(' ');
+          if (shouldSuppressError(message)) {
+            return;
+          }
+          originalConsoleTrace.apply(console, args);
+        };
+        
+        // Override console.info as well
+        const originalConsoleInfo = console.info;
+        console.info = function(...args) {
+          const message = args.join(' ');
+          if (shouldSuppressError(message)) {
+            return;
+          }
+          originalConsoleInfo.apply(console, args);
+        };
+        
+        // Intercept all console methods
+        const consoleMethods = ['debug', 'dir', 'dirxml', 'group', 'groupCollapsed', 'groupEnd', 'table'];
+        consoleMethods.forEach(method => {
+          if (console[method]) {
+            const original = console[method];
+            console[method] = function(...args) {
+              const message = args.join(' ');
+              if (shouldSuppressError(message)) {
+                return;
+              }
+              original.apply(console, args);
+            };
+          }
+        });
+        
         console.log('Error suppression initialized for external extensions');
+        
+        // Additional DOM error interception
+        document.addEventListener('error', function(event) {
+          if (shouldSuppressError(event.message || '')) {
+            event.preventDefault();
+            event.stopPropagation();
+            return false;
+          }
+        }, true);
+        
+        // Intercept all script errors
+        window.addEventListener('error', function(event) {
+          if (shouldSuppressError(event.message || '')) {
+            event.preventDefault();
+            event.stopPropagation();
+            return false;
+          }
+        }, true);
       })();
     </script>
     
