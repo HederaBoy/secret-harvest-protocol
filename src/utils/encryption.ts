@@ -29,14 +29,14 @@ export class FHEEncryption {
   public encryptReward(amount: string): string {
     try {
       // Simulate FHE encryption by creating a deterministic hash
-      const data = ethers.utils.solidityKeccak256(
+      const data = ethers.solidityPackedKeccak256(
         ['uint256', 'bytes32'],
-        [ethers.utils.parseEther(amount), this.privateKey]
+        [ethers.parseEther(amount), this.privateKey]
       );
       
       // Add some randomness to simulate FHE properties
-      const random = ethers.utils.randomBytes(32);
-      const encrypted = ethers.utils.solidityKeccak256(
+      const random = ethers.randomBytes(32);
+      const encrypted = ethers.solidityPackedKeccak256(
         ['bytes32', 'bytes32'],
         [data, random]
       );
@@ -79,7 +79,7 @@ export class FHEEncryption {
   ): string {
     try {
       // Generate a proof that the encrypted rewards belong to the user
-      const proofData = ethers.utils.solidityKeccak256(
+      const proofData = ethers.solidityPackedKeccak256(
         ['uint256', 'address', 'bytes32', 'bytes32'],
         [farmId, userAddress, encryptedRewards, this.privateKey]
       );
@@ -105,11 +105,11 @@ export class FHEEncryption {
   ): string {
     try {
       // Calculate rewards: (stakeAmount * apy * timeElapsed) / (365 days * 10000)
-      const stakeWei = ethers.utils.parseEther(stakeAmount);
-      const rewards = stakeWei.mul(apy).mul(timeElapsed).div(365 * 24 * 60 * 60 * 10000);
+      const stakeWei = ethers.parseEther(stakeAmount);
+      const rewards = stakeWei * BigInt(apy) * BigInt(timeElapsed) / BigInt(365 * 24 * 60 * 60 * 10000);
       
       // Encrypt the calculated rewards
-      const rewardsString = ethers.utils.formatEther(rewards);
+      const rewardsString = ethers.formatEther(rewards);
       return this.encryptReward(rewardsString);
     } catch (error) {
       console.error('Error calculating encrypted rewards:', error);
@@ -157,28 +157,28 @@ export const FHEUtils = {
    * Hash data for FHE operations
    */
   hashData(data: string): string {
-    return ethers.utils.keccak256(ethers.utils.toUtf8Bytes(data));
+    return ethers.keccak256(ethers.toUtf8Bytes(data));
   },
 
   /**
    * Convert amount to wei for FHE calculations
    */
   toWei(amount: string): string {
-    return ethers.utils.parseEther(amount).toString();
+    return ethers.parseEther(amount).toString();
   },
 
   /**
    * Convert wei to ether for display
    */
   fromWei(amount: string): string {
-    return ethers.utils.formatEther(amount);
+    return ethers.formatEther(amount);
   },
 
   /**
    * Generate a unique identifier for encrypted data
    */
   generateEncryptedId(): string {
-    return ethers.utils.hexlify(ethers.utils.randomBytes(32));
+    return ethers.hexlify(ethers.randomBytes(32));
   }
 };
 
