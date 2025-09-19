@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import Logo from "@/components/Logo";
-import WalletConnect from "@/components/WalletConnect";
+import WalletStatus from "@/components/WalletStatus";
 import SeedPod from "@/components/SeedPod";
 import GrowingField from "@/components/GrowingField";
 import heroImage from "@/assets/hero-farming.jpg";
@@ -87,7 +87,7 @@ const Index = () => {
               Analytics
             </a>
           </nav>
-          <WalletConnect />
+          <WalletStatus />
         </div>
       </header>
 

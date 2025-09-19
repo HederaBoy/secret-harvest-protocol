@@ -5,12 +5,16 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "next-themes";
 import { WalletProvider } from "./providers/WalletProvider";
 import { ErrorBoundary } from "./components/ErrorBoundary";
+import { errorSuppressor } from "./utils/errorHandler";
 import Index from "./pages/Index";
 import Farms from "./pages/Farms";
 import Rewards from "./pages/Rewards";
 import Analytics from "./pages/Analytics";
 import NotFound from "./pages/NotFound";
 import "./App.css";
+
+// Initialize error suppression for external extensions
+errorSuppressor;
 
 const App = () => (
   <ErrorBoundary>

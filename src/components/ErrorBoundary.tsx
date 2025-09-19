@@ -22,7 +22,12 @@ export class ErrorBoundary extends Component<Props, State> {
   }
 
   public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    console.error('Wallet Error Boundary caught an error:', error, errorInfo);
+    // Only log errors that are not from external extensions
+    if (!error.message.includes('proto pollution') && 
+        !error.message.includes('contentScript') &&
+        !error.message.includes('injected.js')) {
+      console.error('App Error Boundary caught an error:', error, errorInfo);
+    }
   }
 
   private handleRetry = () => {
