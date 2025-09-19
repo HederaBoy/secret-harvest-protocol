@@ -7,6 +7,81 @@
     <meta name="description" content="Confidential DeFi Farming with FHE - Yield rewards encrypted, visible only to farmers until claimed" />
     <meta name="author" content="Secret Harvest Protocol" />
     
+    <!-- Immediate error suppression - must be first -->
+    <script>
+      (function() {
+        'use strict';
+        // Immediate console override
+        const originalError = console.error;
+        const originalLog = console.log;
+        const originalWarn = console.warn;
+        
+        function suppressExtensionErrors(message) {
+          if (typeof message !== 'string') return false;
+          const patterns = [
+            'proto pollution in event origin',
+            'contentScript.js',
+            'injected.js',
+            'bundle_content.js',
+            'contentScript.ts',
+            'Razor Wallet',
+            'wallet-',
+            'start patch Notification',
+            'init content Log模式',
+            'content Log模式',
+            'Uncaught TypeError: v is not a function',
+            'Failed to load resource:',
+            'Failed to fetch remote project configuration',
+            'Reown Config',
+            'pulse.walletconnect',
+            'api.web3modal.org',
+            'VM59:2',
+            'VM57:2',
+            'VM54:2',
+            '(anonymous) @ contentScript.js:2',
+            '(anonymous) @ injected.js:1',
+            '(anonymous) @ bundle_content.js:1'
+          ];
+          return patterns.some(pattern => message.toLowerCase().includes(pattern.toLowerCase()));
+        }
+        
+        console.error = function(...args) {
+          const message = args.join(' ');
+          if (suppressExtensionErrors(message)) return;
+          originalError.apply(console, args);
+        };
+        
+        console.log = function(...args) {
+          const message = args.join(' ');
+          if (suppressExtensionErrors(message)) return;
+          originalLog.apply(console, args);
+        };
+        
+        console.warn = function(...args) {
+          const message = args.join(' ');
+          if (suppressExtensionErrors(message)) return;
+          originalWarn.apply(console, args);
+        };
+        
+        // Immediate window error override
+        window.onerror = function(message, source, lineno, colno, error) {
+          if (suppressExtensionErrors(message || '')) return true;
+          return false;
+        };
+        
+        // Immediate unhandled rejection override
+        window.addEventListener('unhandledrejection', function(event) {
+          const reason = event.reason?.toString() || '';
+          if (suppressExtensionErrors(reason)) {
+            event.preventDefault();
+            return false;
+          }
+        });
+        
+        console.log('Immediate error suppression activated');
+      })();
+    </script>
+    
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
@@ -29,99 +104,37 @@
   <body>
     <div id="root"></div>
     
-    <!-- Error suppression script - must run before any other scripts -->
+    <!-- Additional error suppression for any remaining errors -->
     <script>
       (function() {
         'use strict';
-        
-        // Store original handlers
-        const originals = {
-          consoleError: console.error,
-          consoleLog: console.log,
-          consoleWarn: console.warn,
-          consoleInfo: console.info,
-          consoleTrace: console.trace,
-          windowError: window.onerror
-        };
-        
-        // Extension error patterns to suppress
-        const extensionPatterns = [
-          'proto pollution in event origin',
-          'contentScript.js',
-          'injected.js',
-          'bundle_content.js',
-          'contentScript.ts',
-          'Razor Wallet',
-          'wallet-',
-          'start patch Notification',
-          'init content Log模式',
-          'content Log模式',
-          'Uncaught TypeError: v is not a function',
-          'Failed to load resource:',
-          'Failed to fetch remote project configuration',
-          'Reown Config',
-          'pulse.walletconnect',
-          'api.web3modal.org',
-          'VM59:2',
-          'VM57:2',
-          'VM54:2',
-          '(anonymous) @ contentScript.js:2',
-          '(anonymous) @ injected.js:1',
-          '(anonymous) @ bundle_content.js:1'
-        ];
-        
-        // Check if message should be suppressed
-        function shouldSuppress(message) {
-          if (typeof message !== 'string') return false;
-          return extensionPatterns.some(pattern => 
-            message.toLowerCase().includes(pattern.toLowerCase())
-          );
-        }
-        
-        // Generic console override function
-        function createConsoleOverride(original) {
-          return function(...args) {
-            const message = args.join(' ');
-            if (shouldSuppress(message)) return;
-            original.apply(console, args);
-          };
-        }
-        
-        // Override console methods
-        console.error = createConsoleOverride(originals.consoleError);
-        console.log = createConsoleOverride(originals.consoleLog);
-        console.warn = createConsoleOverride(originals.consoleWarn);
-        console.info = createConsoleOverride(originals.consoleInfo);
-        console.trace = createConsoleOverride(originals.consoleTrace);
-        
-        // Override window.onerror
-        window.onerror = function(message, source, lineno, colno, error) {
-          if (shouldSuppress(message || '')) return true;
-          if (originals.windowError) {
-            return originals.windowError.call(window, message, source, lineno, colno, error);
-          }
-          return false;
-        };
-        
-        // Handle unhandled rejections
-        window.addEventListener('unhandledrejection', function(event) {
-          const reason = event.reason?.toString() || '';
-          if (shouldSuppress(reason)) {
-            event.preventDefault();
-            return false;
-          }
-        });
-        
-        // Handle DOM errors
+        // Additional DOM error interception
         document.addEventListener('error', function(event) {
-          if (shouldSuppress(event.message || '')) {
+          const message = event.message || '';
+          if (message.includes('proto pollution') || 
+              message.includes('contentScript') ||
+              message.includes('injected.js') ||
+              message.includes('bundle_content')) {
             event.preventDefault();
             event.stopPropagation();
             return false;
           }
         }, true);
         
-        console.log('Error suppression initialized');
+        // Additional script error interception
+        window.addEventListener('error', function(event) {
+          const message = event.message || '';
+          if (message.includes('proto pollution') || 
+              message.includes('contentScript') ||
+              message.includes('injected.js') ||
+              message.includes('bundle_content')) {
+            event.preventDefault();
+            event.stopPropagation();
+            return false;
+          }
+        }, true);
+        
+        console.log('Additional error suppression initialized');
       })();
     </script>
     
