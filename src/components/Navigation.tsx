@@ -2,22 +2,12 @@ import { useState } from "react";
 import { useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import Logo from "@/components/Logo";
-import WalletConnect from "@/components/WalletConnect";
+import WalletStatus from "@/components/WalletStatus";
 import { Menu, X } from "lucide-react";
 
-interface NavigationProps {
-  onWalletConnect?: (address: string) => void;
-  walletConnected?: boolean;
-  walletAddress?: string;
-}
-
-const Navigation = ({ onWalletConnect, walletConnected, walletAddress }: NavigationProps) => {
+const Navigation = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const location = useLocation();
-
-  const handleWalletConnect = (address: string) => {
-    onWalletConnect?.(address);
-  };
 
   const navItems = [
     { href: "/", label: "Home" },
@@ -62,13 +52,9 @@ const Navigation = ({ onWalletConnect, walletConnected, walletAddress }: Navigat
           )}
         </Button>
 
-        {/* Wallet Connect - Desktop */}
+        {/* Wallet Status - Desktop */}
         <div className="hidden md:block">
-          <WalletConnect 
-            onConnect={handleWalletConnect}
-            connected={walletConnected || false}
-            address={walletAddress}
-          />
+          <WalletStatus />
         </div>
       </div>
 
@@ -92,11 +78,7 @@ const Navigation = ({ onWalletConnect, walletConnected, walletAddress }: Navigat
             ))}
           </nav>
           
-          <WalletConnect 
-            onConnect={handleWalletConnect}
-            connected={walletConnected || false}
-            address={walletAddress}
-          />
+          <WalletStatus />
         </div>
       )}
     </header>

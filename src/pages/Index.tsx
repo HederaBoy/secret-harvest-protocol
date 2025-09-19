@@ -2,8 +2,7 @@ import { useAccount } from 'wagmi';
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import Logo from "@/components/Logo";
-import WalletStatus from "@/components/WalletStatus";
+import Navigation from "@/components/Navigation";
 import SeedPod from "@/components/SeedPod";
 import GrowingField from "@/components/GrowingField";
 import heroImage from "@/assets/hero-farming.jpg";
@@ -72,24 +71,8 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-gradient-field particle-field">
-      {/* Header */}
-      <header className="relative z-10 p-6 bg-card/20 backdrop-blur-sm border-b border-primary/20">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <Logo size="lg" />
-          <nav className="hidden md:flex items-center gap-8">
-            <a href="/farms" className="font-tech text-muted-foreground hover:text-primary transition-colors">
-              Farms
-            </a>
-            <a href="/rewards" className="font-tech text-muted-foreground hover:text-primary transition-colors">
-              Rewards
-            </a>
-            <a href="/analytics" className="font-tech text-muted-foreground hover:text-primary transition-colors">
-              Analytics
-            </a>
-          </nav>
-          <WalletStatus />
-        </div>
-      </header>
+      {/* Navigation */}
+      <Navigation />
 
       {/* Hero Section */}
       <section className="relative py-20 overflow-hidden">
