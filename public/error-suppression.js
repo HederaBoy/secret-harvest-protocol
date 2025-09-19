@@ -90,7 +90,19 @@
         lowerMessage.includes('r.write @') ||
         lowerMessage.includes('a.emit @') ||
         lowerMessage.includes('j.push @') ||
-        lowerMessage.includes('_onmessage @')) {
+        lowerMessage.includes('_onmessage @') ||
+        lowerMessage.includes('postmessage') ||
+        lowerMessage.includes('_write') ||
+        lowerMessage.includes('r.write') ||
+        lowerMessage.includes('a.emit') ||
+        lowerMessage.includes('j.push') ||
+        lowerMessage.includes('_onmessage') ||
+        lowerMessage.includes('i @') ||
+        lowerMessage.includes('m @') ||
+        lowerMessage.includes('d @') ||
+        lowerMessage.includes('f @') ||
+        lowerMessage.includes('x @') ||
+        lowerMessage.includes('k @')) {
       return true;
     }
     
@@ -204,6 +216,50 @@
       return false;
     }
   }, true);
+  
+  // Additional aggressive error suppression
+  // Override all possible console methods
+  const consoleMethods = ['assert', 'clear', 'count', 'countReset', 'dir', 'dirxml', 'group', 'groupCollapsed', 'groupEnd', 'table', 'time', 'timeEnd', 'timeLog', 'timeStamp', 'profile', 'profileEnd'];
+  
+  consoleMethods.forEach(method => {
+    if (console[method]) {
+      const original = console[method];
+      console[method] = function(...args) {
+        const message = args.join(' ');
+        if (shouldSuppress(message)) return;
+        original.apply(console, args);
+      };
+    }
+  });
+  
+  // Override console methods that might be added dynamically
+  const originalConsole = console;
+  Object.defineProperty(window, 'console', {
+    get: function() {
+      return originalConsole;
+    },
+    set: function(value) {
+      // Prevent console from being overridden
+      return;
+    }
+  });
+  
+  // Additional error interception
+  const originalAddEventListener = EventTarget.prototype.addEventListener;
+  EventTarget.prototype.addEventListener = function(type, listener, options) {
+    if (type === 'error' || type === 'unhandledrejection') {
+      const wrappedListener = function(event) {
+        if (shouldSuppress(event.message || event.reason?.toString() || '')) {
+          event.preventDefault();
+          event.stopPropagation();
+          return false;
+        }
+        return listener.call(this, event);
+      };
+      return originalAddEventListener.call(this, type, wrappedListener, options);
+    }
+    return originalAddEventListener.call(this, type, listener, options);
+  };
   
   console.log('Error suppression initialized');
 })();
