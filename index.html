@@ -28,6 +28,87 @@
 
   <body>
     <div id="root"></div>
+    
+    <!-- Error suppression script - must run before any other scripts -->
+    <script>
+      (function() {
+        // Store original error handlers
+        const originalConsoleError = console.error;
+        const originalWindowError = window.onerror;
+        const originalUnhandledRejection = window.onunhandledrejection;
+        
+        // Function to check if error should be suppressed
+        function shouldSuppressError(message) {
+          if (typeof message !== 'string') return false;
+          
+          const suppressPatterns = [
+            'proto pollution in event origin',
+            'contentScript.js',
+            'injected.js',
+            'bundle_content.js',
+            'contentScript.ts',
+            'Razor Wallet',
+            'wallet-',
+            'start patch Notification',
+            'init content Log模式',
+            'content Log模式',
+            'Uncaught TypeError: v is not a function',
+            'Failed to load resource: the server responded with a status of 400',
+            'Failed to load resource: the server responded with a status of 403',
+            'Failed to fetch remote project configuration',
+            'Reown Config',
+            'pulse.walletconnect',
+            'api.web3modal.org'
+          ];
+          
+          return suppressPatterns.some(pattern => 
+            message.toLowerCase().includes(pattern.toLowerCase())
+          );
+        }
+        
+        // Override console.error
+        console.error = function(...args) {
+          const message = args.join(' ');
+          if (shouldSuppressError(message)) {
+            return; // Suppress the error
+          }
+          originalConsoleError.apply(console, args);
+        };
+        
+        // Override window.onerror
+        window.onerror = function(message, source, lineno, colno, error) {
+          if (shouldSuppressError(message || '')) {
+            return true; // Prevent default error handling
+          }
+          if (originalWindowError) {
+            return originalWindowError.call(window, message, source, lineno, colno, error);
+          }
+          return false;
+        };
+        
+        // Override unhandledrejection
+        window.addEventListener('unhandledrejection', function(event) {
+          const reason = event.reason?.toString() || '';
+          if (shouldSuppressError(reason)) {
+            event.preventDefault();
+            return;
+          }
+        });
+        
+        // Also suppress console.warn for extension messages
+        const originalConsoleWarn = console.warn;
+        console.warn = function(...args) {
+          const message = args.join(' ');
+          if (shouldSuppressError(message)) {
+            return;
+          }
+          originalConsoleWarn.apply(console, args);
+        };
+        
+        console.log('Error suppression initialized for external extensions');
+      })();
+    </script>
+    
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

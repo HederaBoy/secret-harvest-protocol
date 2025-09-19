@@ -60,7 +60,7 @@ export class ErrorSuppressor {
   }
 
   private shouldSuppressError(message: string): boolean {
-    // List of patterns to suppress
+    // List of patterns to suppress (same as HTML script)
     const suppressPatterns = [
       'proto pollution in event origin',
       'contentScript.js',
@@ -78,7 +78,10 @@ export class ErrorSuppressor {
       'Failed to fetch remote project configuration',
       'Reown Config',
       'pulse.walletconnect',
-      'api.web3modal.org'
+      'api.web3modal.org',
+      'VM57:2',
+      'VM59:2',
+      'VM54:2'
     ];
 
     return suppressPatterns.some(pattern => 
