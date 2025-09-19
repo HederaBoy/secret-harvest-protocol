@@ -7,94 +7,8 @@
     <meta name="description" content="Confidential DeFi Farming with FHE - Yield rewards encrypted, visible only to farmers until claimed" />
     <meta name="author" content="Secret Harvest Protocol" />
     
-    <!-- Immediate error suppression - must be first -->
-    <script>
-      (function() {
-        'use strict';
-        // Immediate console override
-        const originalError = console.error;
-        const originalLog = console.log;
-        const originalWarn = console.warn;
-        
-        function suppressExtensionErrors(message) {
-          if (typeof message !== 'string') return false;
-          const patterns = [
-            'proto pollution in event origin',
-            'contentScript.js',
-            'contentscript.js',
-            'injected.js',
-            'bundle_content.js',
-            'contentScript.ts',
-            'inpage.js',
-            'Razor Wallet',
-            'wallet-',
-            'start patch Notification',
-            'init content Log模式',
-            'content Log模式',
-            'Uncaught TypeError: v is not a function',
-            'Failed to load resource:',
-            'Failed to fetch remote project configuration',
-            'Reown Config',
-            'pulse.walletconnect',
-            'api.web3modal.org',
-            'VM59:2',
-            'VM57:2',
-            'VM54:2',
-            '(anonymous) @ contentScript.js:2',
-            '(anonymous) @ contentscript.js:1',
-            '(anonymous) @ contentscript.js:10',
-            '(anonymous) @ contentscript.js:12',
-            '(anonymous) @ injected.js:1',
-            '(anonymous) @ bundle_content.js:1',
-            '(anonymous) @ inpage.js:1',
-            '(anonymous) @ inpage.js:2',
-            '(anonymous) @ inpage.js:41',
-            '_postMessage @ contentscript.js:1',
-            '_write @ contentscript.js:1',
-            'R.write @ contentscript.js:12',
-            'a.emit @ contentscript.js:10',
-            'J.push @ contentscript.js:10',
-            '_onMessage @ contentscript.js:10'
-          ];
-          return patterns.some(pattern => message.toLowerCase().includes(pattern.toLowerCase()));
-        }
-        
-        console.error = function(...args) {
-          const message = args.join(' ');
-          if (suppressExtensionErrors(message)) return;
-          originalError.apply(console, args);
-        };
-        
-        console.log = function(...args) {
-          const message = args.join(' ');
-          if (suppressExtensionErrors(message)) return;
-          originalLog.apply(console, args);
-        };
-        
-        console.warn = function(...args) {
-          const message = args.join(' ');
-          if (suppressExtensionErrors(message)) return;
-          originalWarn.apply(console, args);
-        };
-        
-        // Immediate window error override
-        window.onerror = function(message, source, lineno, colno, error) {
-          if (suppressExtensionErrors(message || '')) return true;
-          return false;
-        };
-        
-        // Immediate unhandled rejection override
-        window.addEventListener('unhandledrejection', function(event) {
-          const reason = event.reason?.toString() || '';
-          if (suppressExtensionErrors(reason)) {
-            event.preventDefault();
-            return false;
-          }
-        });
-        
-        console.log('Immediate error suppression activated');
-      })();
-    </script>
+    <!-- Error suppression script - must be first -->
+    <script src="/error-suppression.js"></script>
     
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -118,43 +32,6 @@
   <body>
     <div id="root"></div>
     
-    <!-- Additional error suppression for any remaining errors -->
-    <script>
-      (function() {
-        'use strict';
-        // Additional DOM error interception
-        document.addEventListener('error', function(event) {
-          const message = event.message || '';
-          if (message.includes('proto pollution') || 
-              message.includes('contentScript') ||
-              message.includes('contentscript') ||
-              message.includes('injected.js') ||
-              message.includes('bundle_content') ||
-              message.includes('inpage.js')) {
-            event.preventDefault();
-            event.stopPropagation();
-            return false;
-          }
-        }, true);
-        
-        // Additional script error interception
-        window.addEventListener('error', function(event) {
-          const message = event.message || '';
-          if (message.includes('proto pollution') || 
-              message.includes('contentScript') ||
-              message.includes('contentscript') ||
-              message.includes('injected.js') ||
-              message.includes('bundle_content') ||
-              message.includes('inpage.js')) {
-            event.preventDefault();
-            event.stopPropagation();
-            return false;
-          }
-        }, true);
-        
-        console.log('Additional error suppression initialized');
-      })();
-    </script>
     
     <script type="module" src="/src/main.tsx"></script>
   </body>
