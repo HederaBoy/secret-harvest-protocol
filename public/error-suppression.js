@@ -53,7 +53,26 @@
     'R.write @ contentscript.js:12',
     'a.emit @ contentscript.js:10',
     'J.push @ contentscript.js:10',
-    '_onMessage @ contentscript.js:10'
+    '_onMessage @ contentscript.js:10',
+    '_postMessage @ inpage.js:41',
+    '_write @ inpage.js:41',
+    'k @ inpage.js:41',
+    'O @ inpage.js:41',
+    '_send @ inpage.js:45',
+    'call @ inpage.js:45',
+    'callAsync @ inpage.js:45',
+    'await in call',
+    '_postMessage @ contentScript.js:6',
+    '_write @ contentScript.js:6',
+    'ee @ contentScript.js:6',
+    'L @ contentScript.js:6',
+    'Rs.I.write @ contentScript.js:6',
+    'Ul @ contentScript.js:7',
+    'he.emit @ contentScript.js:6',
+    'ae @ contentScript.js:7',
+    'oe @ contentScript.js:7',
+    'M.push @ contentScript.js:7',
+    '_onMessage @ contentScript.js:7'
   ];
   
   // Check if message should be suppressed
@@ -102,7 +121,31 @@
         lowerMessage.includes('d @') ||
         lowerMessage.includes('f @') ||
         lowerMessage.includes('x @') ||
-        lowerMessage.includes('k @')) {
+        lowerMessage.includes('k @') ||
+        lowerMessage.includes('o @') ||
+        lowerMessage.includes('l @') ||
+        lowerMessage.includes('e @') ||
+        lowerMessage.includes('h @') ||
+        lowerMessage.includes('u @') ||
+        lowerMessage.includes('a @') ||
+        lowerMessage.includes('s @') ||
+        lowerMessage.includes('c @') ||
+        lowerMessage.includes('_send @') ||
+        lowerMessage.includes('call @') ||
+        lowerMessage.includes('callasync @') ||
+        lowerMessage.includes('await in call') ||
+        lowerMessage.includes('rs.i.write @') ||
+        lowerMessage.includes('ul @') ||
+        lowerMessage.includes('he.emit @') ||
+        lowerMessage.includes('ae @') ||
+        lowerMessage.includes('oe @') ||
+        lowerMessage.includes('m.push @') ||
+        lowerMessage.includes('_onmessage @') ||
+        lowerMessage.includes('inpage.js:41') ||
+        lowerMessage.includes('inpage.js:45') ||
+        lowerMessage.includes('inpage.js:64') ||
+        lowerMessage.includes('contentscript.js:6') ||
+        lowerMessage.includes('contentscript.js:7')) {
       return true;
     }
     
