@@ -67,6 +67,7 @@ export class ErrorSuppressor {
       'injected.js',
       'bundle_content.js',
       'contentScript.ts',
+      'inpage.js',
       'Razor Wallet',
       'wallet-',
       'start patch Notification',
@@ -84,7 +85,10 @@ export class ErrorSuppressor {
       'VM54:2',
       '(anonymous) @ contentScript.js:2',
       '(anonymous) @ injected.js:1',
-      '(anonymous) @ bundle_content.js:1'
+      '(anonymous) @ bundle_content.js:1',
+      '(anonymous) @ inpage.js:1',
+      '(anonymous) @ inpage.js:2',
+      '(anonymous) @ inpage.js:41'
     ];
 
     return suppressPatterns.some(pattern => 
