@@ -8,6 +8,13 @@
   const originalWarn = console.warn;
   const originalInfo = console.info;
   const originalTrace = console.trace;
+  const originalDebug = console.debug;
+  const originalDir = console.dir;
+  const originalDirxml = console.dirxml;
+  const originalGroup = console.group;
+  const originalGroupCollapsed = console.groupCollapsed;
+  const originalGroupEnd = console.groupEnd;
+  const originalTable = console.table;
   
   // Extension error patterns to suppress
   const extensionPatterns = [
@@ -52,8 +59,43 @@
   // Check if message should be suppressed
   function shouldSuppress(message) {
     if (typeof message !== 'string') return false;
+    
+    // More aggressive pattern matching
+    const lowerMessage = message.toLowerCase();
+    
+    // Check for any extension-related patterns
+    if (lowerMessage.includes('proto pollution') ||
+        lowerMessage.includes('contentscript') ||
+        lowerMessage.includes('contentScript') ||
+        lowerMessage.includes('injected.js') ||
+        lowerMessage.includes('bundle_content') ||
+        lowerMessage.includes('inpage.js') ||
+        lowerMessage.includes('razor wallet') ||
+        lowerMessage.includes('wallet-') ||
+        lowerMessage.includes('init content log') ||
+        lowerMessage.includes('content log模式') ||
+        lowerMessage.includes('start patch notification') ||
+        lowerMessage.includes('uncaught typeerror: v is not a function') ||
+        lowerMessage.includes('failed to load resource') ||
+        lowerMessage.includes('failed to fetch remote project') ||
+        lowerMessage.includes('reown config') ||
+        lowerMessage.includes('pulse.walletconnect') ||
+        lowerMessage.includes('api.web3modal.org') ||
+        lowerMessage.includes('vm59:2') ||
+        lowerMessage.includes('vm57:2') ||
+        lowerMessage.includes('vm54:2') ||
+        lowerMessage.includes('(anonymous) @') ||
+        lowerMessage.includes('_postmessage @') ||
+        lowerMessage.includes('_write @') ||
+        lowerMessage.includes('r.write @') ||
+        lowerMessage.includes('a.emit @') ||
+        lowerMessage.includes('j.push @') ||
+        lowerMessage.includes('_onmessage @')) {
+      return true;
+    }
+    
     return extensionPatterns.some(pattern => 
-      message.toLowerCase().includes(pattern.toLowerCase())
+      lowerMessage.includes(pattern.toLowerCase())
     );
   }
   
@@ -86,6 +128,48 @@
     const message = args.join(' ');
     if (shouldSuppress(message)) return;
     originalTrace.apply(console, args);
+  };
+  
+  console.debug = function(...args) {
+    const message = args.join(' ');
+    if (shouldSuppress(message)) return;
+    originalDebug.apply(console, args);
+  };
+  
+  console.dir = function(...args) {
+    const message = args.join(' ');
+    if (shouldSuppress(message)) return;
+    originalDir.apply(console, args);
+  };
+  
+  console.dirxml = function(...args) {
+    const message = args.join(' ');
+    if (shouldSuppress(message)) return;
+    originalDirxml.apply(console, args);
+  };
+  
+  console.group = function(...args) {
+    const message = args.join(' ');
+    if (shouldSuppress(message)) return;
+    originalGroup.apply(console, args);
+  };
+  
+  console.groupCollapsed = function(...args) {
+    const message = args.join(' ');
+    if (shouldSuppress(message)) return;
+    originalGroupCollapsed.apply(console, args);
+  };
+  
+  console.groupEnd = function(...args) {
+    const message = args.join(' ');
+    if (shouldSuppress(message)) return;
+    originalGroupEnd.apply(console, args);
+  };
+  
+  console.table = function(...args) {
+    const message = args.join(' ');
+    if (shouldSuppress(message)) return;
+    originalTable.apply(console, args);
   };
   
   // Override window.onerror
