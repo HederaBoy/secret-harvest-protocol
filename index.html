@@ -21,6 +21,7 @@
           const patterns = [
             'proto pollution in event origin',
             'contentScript.js',
+            'contentscript.js',
             'injected.js',
             'bundle_content.js',
             'contentScript.ts',
@@ -40,11 +41,20 @@
             'VM57:2',
             'VM54:2',
             '(anonymous) @ contentScript.js:2',
+            '(anonymous) @ contentscript.js:1',
+            '(anonymous) @ contentscript.js:10',
+            '(anonymous) @ contentscript.js:12',
             '(anonymous) @ injected.js:1',
             '(anonymous) @ bundle_content.js:1',
             '(anonymous) @ inpage.js:1',
             '(anonymous) @ inpage.js:2',
-            '(anonymous) @ inpage.js:41'
+            '(anonymous) @ inpage.js:41',
+            '_postMessage @ contentscript.js:1',
+            '_write @ contentscript.js:1',
+            'R.write @ contentscript.js:12',
+            'a.emit @ contentscript.js:10',
+            'J.push @ contentscript.js:10',
+            '_onMessage @ contentscript.js:10'
           ];
           return patterns.some(pattern => message.toLowerCase().includes(pattern.toLowerCase()));
         }
@@ -117,6 +127,7 @@
           const message = event.message || '';
           if (message.includes('proto pollution') || 
               message.includes('contentScript') ||
+              message.includes('contentscript') ||
               message.includes('injected.js') ||
               message.includes('bundle_content') ||
               message.includes('inpage.js')) {
@@ -131,6 +142,7 @@
           const message = event.message || '';
           if (message.includes('proto pollution') || 
               message.includes('contentScript') ||
+              message.includes('contentscript') ||
               message.includes('injected.js') ||
               message.includes('bundle_content') ||
               message.includes('inpage.js')) {

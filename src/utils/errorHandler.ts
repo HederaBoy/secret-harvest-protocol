@@ -64,6 +64,7 @@ export class ErrorSuppressor {
     const suppressPatterns = [
       'proto pollution in event origin',
       'contentScript.js',
+      'contentscript.js',
       'injected.js',
       'bundle_content.js',
       'contentScript.ts',
@@ -84,11 +85,20 @@ export class ErrorSuppressor {
       'VM59:2',
       'VM54:2',
       '(anonymous) @ contentScript.js:2',
+      '(anonymous) @ contentscript.js:1',
+      '(anonymous) @ contentscript.js:10',
+      '(anonymous) @ contentscript.js:12',
       '(anonymous) @ injected.js:1',
       '(anonymous) @ bundle_content.js:1',
       '(anonymous) @ inpage.js:1',
       '(anonymous) @ inpage.js:2',
-      '(anonymous) @ inpage.js:41'
+      '(anonymous) @ inpage.js:41',
+      '_postMessage @ contentscript.js:1',
+      '_write @ contentscript.js:1',
+      'R.write @ contentscript.js:12',
+      'a.emit @ contentscript.js:10',
+      'J.push @ contentscript.js:10',
+      '_onMessage @ contentscript.js:10'
     ];
 
     return suppressPatterns.some(pattern => 
