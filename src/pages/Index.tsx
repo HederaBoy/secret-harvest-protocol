@@ -10,6 +10,9 @@ import { Shield, Zap, Lock, TrendingUp, Sprout, Users } from "lucide-react";
 
 const Index = () => {
   const { isConnected } = useAccount();
+  
+  // Debug: Add console log to check if component is rendering
+  console.log('Index component rendering, isConnected:', isConnected);
 
   const seedPods = [
     {
@@ -71,6 +74,11 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-gradient-field particle-field">
+      {/* Debug: Simple test element */}
+      <div style={{position: 'fixed', top: '10px', left: '10px', background: 'red', color: 'white', padding: '10px', zIndex: 9999}}>
+        DEBUG: Index component is rendering!
+      </div>
+      
       {/* Navigation */}
       <Navigation />
 
