@@ -1,0 +1,281 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    /* Futuristic DeFi Farming Theme */
+    --background: 219 28% 6%;
+    --foreground: 120 50% 90%;
+
+    --card: 220 25% 8%;
+    --card-foreground: 120 40% 85%;
+
+    --popover: 220 30% 10%;
+    --popover-foreground: 120 50% 90%;
+
+    /* Neon Green Primary (Growing/Harvest) */
+    --primary: 120 100% 50%;
+    --primary-foreground: 220 30% 10%;
+
+    /* Electric Blue Secondary (Tech/Blockchain) */
+    --secondary: 200 100% 40%;
+    --secondary-foreground: 120 50% 90%;
+
+    /* Muted Dark Greens */
+    --muted: 120 20% 15%;
+    --muted-foreground: 120 15% 60%;
+
+    /* Cyber Purple Accent */
+    --accent: 280 100% 60%;
+    --accent-foreground: 220 30% 10%;
+
+    /* Warning Red for alerts */
+    --destructive: 0 100% 60%;
+    --destructive-foreground: 120 50% 90%;
+
+    /* Subtle borders and inputs */
+    --border: 120 20% 20%;
+    --input: 120 15% 12%;
+    --ring: 120 100% 50%;
+
+    /* Custom Farm Theme Colors */
+    --seed-glow: 120 100% 40%;
+    --harvest-ready: 60 100% 50%;
+    --crypto-blue: 200 100% 50%;
+    --quantum-purple: 280 100% 70%;
+    --bio-green: 140 80% 45%;
+    
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(120 100% 40%) 0%, hsl(140 80% 45%) 100%);
+    --gradient-secondary: linear-gradient(135deg, hsl(200 100% 40%) 0%, hsl(280 100% 60%) 100%);
+    --gradient-glow: radial-gradient(circle, hsl(120 100% 50% / 0.3) 0%, transparent 70%);
+    --gradient-field: linear-gradient(180deg, hsl(220 25% 8%) 0%, hsl(120 30% 10%) 100%);
+
+    /* Shadows and Effects */
+    --shadow-glow: 0 0 20px hsl(120 100% 50% / 0.3);
+    --shadow-seed: 0 4px 20px hsl(120 100% 50% / 0.4);
+    --shadow-cyber: 0 0 30px hsl(200 100% 50% / 0.3);
+
+    --radius: 0.75rem;
+
+    --sidebar-background: 0 0% 98%;
+
+    --sidebar-foreground: 240 5.3% 26.1%;
+
+    --sidebar-primary: 240 5.9% 10%;
+
+    --sidebar-primary-foreground: 0 0% 98%;
+
+    --sidebar-accent: 240 4.8% 95.9%;
+
+    --sidebar-accent-foreground: 240 5.9% 10%;
+
+    --sidebar-border: 220 13% 91%;
+
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground overflow-x-hidden;
+    background: var(--gradient-field);
+  }
+}
+
+@layer components {
+  /* Futuristic Glow Effects */
+  .glow-effect {
+    filter: drop-shadow(var(--shadow-glow));
+  }
+  
+  .seed-glow {
+    box-shadow: var(--shadow-seed);
+    filter: drop-shadow(0 0 10px hsl(var(--seed-glow) / 0.6));
+  }
+  
+  .cyber-glow {
+    box-shadow: var(--shadow-cyber);
+  }
+
+  /* Animated Particles */
+  .particle-field {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .particle-field::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+      radial-gradient(2px 2px at 20px 30px, hsl(var(--primary) / 0.3), transparent),
+      radial-gradient(2px 2px at 40px 70px, hsl(var(--secondary) / 0.2), transparent),
+      radial-gradient(1px 1px at 90px 40px, hsl(var(--accent) / 0.3), transparent),
+      radial-gradient(1px 1px at 130px 80px, hsl(var(--primary) / 0.2), transparent);
+    background-repeat: repeat;
+    background-size: 150px 100px;
+    animation: particles 20s linear infinite;
+    pointer-events: none;
+  }
+
+  /* Growing Field Animation */
+  .growing-field {
+    position: relative;
+    background: var(--gradient-field);
+  }
+  
+  .growing-field::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--gradient-primary);
+    animation: grow-pulse 3s ease-in-out infinite;
+  }
+
+  /* Encrypted Blur Effect */
+  .encrypted-blur {
+    filter: blur(8px);
+    transition: filter 0.3s ease;
+  }
+  
+  .encrypted-blur:hover {
+    filter: blur(4px);
+  }
+  
+  .decrypted {
+    filter: blur(0px);
+    animation: decrypt 0.8s ease-out;
+  }
+}
+
+@layer utilities {
+  /* Text Gradients */
+  .text-gradient-primary {
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  
+  .text-gradient-secondary {
+    background: var(--gradient-secondary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Hover Animations */
+  .hover-glow {
+    transition: all 0.3s ease;
+  }
+  
+  .hover-glow:hover {
+    transform: translateY(-2px);
+    filter: drop-shadow(var(--shadow-glow));
+  }
+
+  .hover-scale {
+    transition: transform 0.3s ease;
+  }
+  
+  .hover-scale:hover {
+    transform: scale(1.05);
+  }
+}
+
+/* Keyframe Animations */
+@keyframes particles {
+  0% { transform: translateY(0px) translateX(0px); }
+  50% { transform: translateY(-10px) translateX(5px); }
+  100% { transform: translateY(0px) translateX(0px); }
+}
+
+@keyframes grow-pulse {
+  0%, 100% { 
+    opacity: 0.6;
+    height: 3px;
+  }
+  50% { 
+    opacity: 1;
+    height: 6px;
+  }
+}
+
+@keyframes decrypt {
+  0% { 
+    filter: blur(8px);
+    opacity: 0.7;
+  }
+  100% { 
+    filter: blur(0px);
+    opacity: 1;
+  }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { 
+    box-shadow: 0 0 10px hsl(var(--primary) / 0.3);
+  }
+  50% { 
+    box-shadow: 0 0 30px hsl(var(--primary) / 0.8);
+  }
+}
